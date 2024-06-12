@@ -1,9 +1,20 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import NavBar from './NavBar'
+import axios from 'axios'
 
 const ViewAll = () => {
+    const [data,changedData] = useState([])
+    const fetchData = () =>{
+        axios.post("http://localhost:8080/view",data).then(
+            (response)=>{
+                changedData(response.data)
+            }
+        ).catch().finally()
+    }
+    useEffect(()=>{fetchData()},[])
     return (
         <div>
-
+            <NavBar/>
             <div className="container">
                 <div className="row">
                     <div className="col col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
@@ -19,12 +30,16 @@ const ViewAll = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <th scope="row">1</th>
-                                            <td>Mark</td>
-                                            <td>Otto</td>
-                                            <td>@mdo</td>
-                                        </tr>
+                                        {data.map(
+                                            (value,index)=>{
+                                                return <tr>
+                                                <th scope="row">{value.sid}</th>
+                                                <td>{value.sname}</td>
+                                                <td>{value.scourse}</td>
+                                                <td>{value.percentage}</td>
+                                            </tr>
+                                            }
+                                        )}
                                         
                                     </tbody>
                                 </table>
